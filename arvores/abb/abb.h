@@ -101,6 +101,13 @@ private:
         imprimirNo(no->esq, nivel + 1, 'e');
         imprimirNo(no->dir, nivel + 1, 'd');
     }
+
+    int contadorNo(NoABB<C, V>* no) {
+        if (no == nullptr)
+            return 0;
+        else
+            return contadorNo(no->esq) + contadorNo(no->dir) + 1;
+    }
     
 public:
     ABB() { raiz = nullptr; }
@@ -160,7 +167,7 @@ public:
     int tamanho() {
         //TODO exercicio 1.c
         //Escreva uma função recursiva ABB_Tamanho que devolva o número de nós de uma árvore binária.
-        
+        return contadorNo(raiz);
     }
 
     // retorna true se a árvore estiver vazia
@@ -171,12 +178,14 @@ public:
         //TODO exercico 1.d
         //Escreva uma função recursiva ABB_Altura que calcule a altura de uma árvore binária. Sua implementação
         //deve ser preguiçosa (lazy), ou seja, não é necessário calcular as profundidades antes
+        return 0;
     }
 
     int calcularProfundidades(NoABB<C, V>* no) {
         //TODO exercicio 1.e
         //Acrescente um campo profundidade a estrutura ABB para armazenar a profundidade do nó. Escreva uma
         //função ABB_CalcularProfundidades que atribua as profundidades de todos os nós.
+        return 0;
     }
 
     int comprimentoInterno() {
@@ -184,6 +193,7 @@ public:
         //O comprimento interno de uma árvore binária é a soma das profundidades dos seus nós, ou seja, a soma de
         //todos os caminhos que levam da raíz até um nó. Escreva um método ABB_ComprimentoInterno que retorne
         //o comprimento interno de uma árvore binária.
+        return 0;
     }
 };
 

@@ -10,8 +10,12 @@ int main() {
     abb.inserir(6, 0);
     abb.inserir(2, 0);
     abb.inserir(3, 0);
+    abb.inserir(5, 0);
+    abb.inserir(7, 0);
+    abb.inserir(1, 0);
 
     abb.imprimir();
+    cout << "tamanho: " << abb.tamanho() << endl;
 
     return 0;
 }
