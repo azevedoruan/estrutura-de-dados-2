@@ -98,7 +98,7 @@ private:
                 cout << "       ";
                 nivelAux--;
             }
-            cout << "(" << lado << ") " << no->chave << endl;
+            cout << "(" << lado << ") " << no->chave << " prof " << no->getProfundidade() << endl;
         }
         
         imprimirNo(no->esq, nivel + 1, 'e');
@@ -127,6 +127,14 @@ private:
                 return alturaEsq + 1;
         }
         return alturaDir + 1;
+    }
+
+    void calcularProfundidadeNo(NoABB<C, V>* no, int profundidade) {
+        if (no == nullptr)
+            return;
+        no->setProfundidade(profundidade);
+        calcularProfundidadeNo(no->dir, profundidade + 1);
+        calcularProfundidadeNo(no->esq, profundidade + 1);
     }
     
 public:
@@ -201,12 +209,11 @@ public:
         return alturaNo(raiz) - 1;
     }
 
-    int calcularProfundidades(NoABB<C, V>* no) {
-        //TODO exercicio 1.e
+    void calcularProfundidades() {
+        //exercicio 1.e
         //Acrescente um campo profundidade a estrutura ABB para armazenar a profundidade do nó. Escreva uma
         //função ABB_CalcularProfundidades que atribua as profundidades de todos os nós.
-
-        return 0;
+        calcularProfundidadeNo(raiz, 0);
     }
 
     int comprimentoInterno() {

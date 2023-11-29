@@ -13,6 +13,7 @@ int main() {
     abb.inserir(5, 0);
     abb.inserir(7, 0);
     abb.inserir(1, 0);
+    abb.calcularProfundidades();
 
     abb.imprimir();
     cout << "tamanho: " << abb.tamanho() << endl;
