@@ -13,6 +13,7 @@ class NoABB {
 private:
     C chave;
     V valor;
+    int profundidade;
     NoABB *esq;
     NoABB *dir;
     friend class ABB<C, V>;
@@ -28,6 +29,8 @@ public:
     ~NoABB() = default;
     C getChave() { return chave; }
     V &getValor() { return valor; }
+    int getProfundidade() { return profundidade; }
+    void setProfundidade(int profundidade) { this->profundidade = profundidade; }
 };
 
 template <typename C, typename V>
@@ -108,6 +111,23 @@ private:
         else
             return contadorNo(no->esq) + contadorNo(no->dir) + 1;
     }
+
+    int alturaNo(NoABB<C, V>* no) {
+        int alturaDir = 0;
+        int alturaEsq = 0;
+
+        if (no->dir != nullptr) {
+            alturaDir = alturaNo(no->dir);
+        }
+        if (no->esq != nullptr) {
+            alturaEsq = alturaNo(no->esq);
+            if (alturaDir >= alturaEsq)
+                return alturaDir + 1;
+            else
+                return alturaEsq + 1;
+        }
+        return alturaDir + 1;
+    }
     
 public:
     ABB() { raiz = nullptr; }
@@ -165,7 +185,7 @@ public:
 
     // retorna o número de nós da árvore
     int tamanho() {
-        //TODO exercicio 1.c
+        //exercicio 1.c
         //Escreva uma função recursiva ABB_Tamanho que devolva o número de nós de uma árvore binária.
         return contadorNo(raiz);
     }
@@ -175,16 +195,17 @@ public:
 
     // retorna o número de níveis de uma árvore
     int altura() {
-        //TODO exercico 1.d
+        //exercico 1.d
         //Escreva uma função recursiva ABB_Altura que calcule a altura de uma árvore binária. Sua implementação
         //deve ser preguiçosa (lazy), ou seja, não é necessário calcular as profundidades antes
-        return 0;
+        return alturaNo(raiz) - 1;
     }
 
     int calcularProfundidades(NoABB<C, V>* no) {
         //TODO exercicio 1.e
         //Acrescente um campo profundidade a estrutura ABB para armazenar a profundidade do nó. Escreva uma
         //função ABB_CalcularProfundidades que atribua as profundidades de todos os nós.
+
         return 0;
     }
 

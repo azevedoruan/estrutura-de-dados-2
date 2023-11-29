@@ -16,6 +16,7 @@ int main() {
 
     abb.imprimir();
     cout << "tamanho: " << abb.tamanho() << endl;
+    cout << "altura (lazy): " << abb.altura() << endl;
 
     return 0;
 }
