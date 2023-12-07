@@ -16,8 +16,10 @@ int main() {
     abb.calcularProfundidades();
 
     abb.imprimir();
-    cout << "tamanho: " << abb.tamanho() << endl;
+    cout << "tamanho: " << abb.getTamanho() << endl;
+    cout << "tamanho ansioso: " << abb.tamanhoAnsioso() << endl;
     cout << "altura (lazy): " << abb.altura() << endl;
+    cout << "comprimento interno: " << abb.comprimentoInterno() << endl;
 
     return 0;
 }

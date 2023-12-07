@@ -37,10 +37,13 @@ template <typename C, typename V>
 class ABB {
 private:
     NoABB<C, V> *raiz;
+    int tamanho;
 
     NoABB<C, V>* inserirNo(NoABB<C, V> *no, C chave, V valor) {
-        if(no == nullptr)
+        if(no == nullptr) {
+            tamanho++;
             return new NoABB(chave, valor);
+        }
         if(chave == no->chave)
             no->valor = valor;
         else if(chave < no->chave)
@@ -84,6 +87,7 @@ private:
             no->chave = suc->chave;
             no->valor = suc->valor;
             no->dir = removerNo(no->dir, suc->chave);
+            tamanho--;
         } 
         return no;
     }
@@ -136,9 +140,18 @@ private:
         calcularProfundidadeNo(no->dir, profundidade + 1);
         calcularProfundidadeNo(no->esq, profundidade + 1);
     }
+
+    int comprimentoInternoNo(NoABB<C, V>* no) {
+        if (no == nullptr)
+            return 0;
+        return comprimentoInternoNo(no->esq) + comprimentoInternoNo(no->dir) + 1;
+    }
     
 public:
-    ABB() { raiz = nullptr; }
+    ABB() {
+        raiz = nullptr;
+        tamanho = 0;
+    }
     ~ABB() = default;
 
     // insere o par (chave, valor) na árvore
@@ -192,10 +205,14 @@ public:
     NoABB<C, V>* antecessor(C chave);
 
     // retorna o número de nós da árvore
-    int tamanho() {
+    int getTamanho() {
         //exercicio 1.c
         //Escreva uma função recursiva ABB_Tamanho que devolva o número de nós de uma árvore binária.
         return contadorNo(raiz);
+    }
+
+    int tamanhoAnsioso() {
+        return this->tamanho;
     }
 
     // retorna true se a árvore estiver vazia
@@ -217,12 +234,14 @@ public:
     }
 
     int comprimentoInterno() {
-        //TODO exercicio 1.f
+        //exercicio 1.f
         //O comprimento interno de uma árvore binária é a soma das profundidades dos seus nós, ou seja, a soma de
         //todos os caminhos que levam da raíz até um nó. Escreva um método ABB_ComprimentoInterno que retorne
         //o comprimento interno de uma árvore binária.
-        return 0;
+        return comprimentoInternoNo(raiz) - 1;
     }
+
+
 };
 
 #endif
