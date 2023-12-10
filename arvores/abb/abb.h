@@ -2,6 +2,7 @@
 #define ABB_H
 
 #include <iostream>
+#include <queue>
 
 using namespace std;
 
@@ -38,18 +39,24 @@ class ABB {
 private:
     NoABB<C, V> *raiz;
     int tamanho;
+    int h;
+    int ci;
 
-    NoABB<C, V>* inserirNo(NoABB<C, V> *no, C chave, V valor) {
+    NoABB<C, V>* inserirNo(NoABB<C, V> *no, C chave, V valor, int nivel) {
         if(no == nullptr) {
             tamanho++;
+            if (tamanho > 1)
+                ci++;
+            if (nivel > h)
+                h = nivel;
             return new NoABB(chave, valor);
         }
         if(chave == no->chave)
             no->valor = valor;
         else if(chave < no->chave)
-            no->esq = inserirNo(no->esq, chave, valor);
+            no->esq = inserirNo(no->esq, chave, valor, nivel + 1);
         else
-            no->dir = inserirNo(no->dir, chave, valor);
+            no->dir = inserirNo(no->dir, chave, valor, nivel + 1);
         return no;
     }
 
@@ -88,6 +95,8 @@ private:
             no->valor = suc->valor;
             no->dir = removerNo(no->dir, suc->chave);
             tamanho--;
+            if (tamanho > 1)
+                ci--;
         } 
         return no;
     }
@@ -117,20 +126,16 @@ private:
     }
 
     int alturaNo(NoABB<C, V>* no) {
-        int alturaDir = 0;
-        int alturaEsq = 0;
+        if (no == nullptr)
+            return 0;
+        
+        int hEsq = alturaNo(no->esq);
+        int hDir = alturaNo(no->dir);
 
-        if (no->dir != nullptr) {
-            alturaDir = alturaNo(no->dir);
-        }
-        if (no->esq != nullptr) {
-            alturaEsq = alturaNo(no->esq);
-            if (alturaDir >= alturaEsq)
-                return alturaDir + 1;
-            else
-                return alturaEsq + 1;
-        }
-        return alturaDir + 1;
+        if (hEsq >= hDir)
+            return hEsq + 1;
+        else
+            return hDir + 1;
     }
 
     void calcularProfundidadeNo(NoABB<C, V>* no, int profundidade) {
@@ -151,12 +156,45 @@ public:
     ABB() {
         raiz = nullptr;
         tamanho = 0;
+        h = 0;
+        ci = 0;
     }
     ~ABB() = default;
 
     // insere o par (chave, valor) na árvore
     void inserir(C chave, V valor) {
-        raiz = inserirNo(raiz, chave, valor);
+        raiz = inserirNo(raiz, chave, valor, 0);
+    }
+
+    void inserirIterativo(C chave, V valor) {
+        if (raiz == nullptr) {
+            raiz = new NoABB(chave, valor);
+            return;
+        }
+
+        NoABB<C, V>* noCorrente = raiz;
+        bool inserido = false;
+
+        while (inserido == false) {
+            if (noCorrente->getChave() == chave) {
+                noCorrente->valor = valor;
+                inserido = true;
+            } else if (chave < noCorrente->getChave()) {
+                if (noCorrente->esq == nullptr) {
+                    noCorrente->esq = new NoABB(chave, valor);
+                    inserido = true;
+                } else {
+                    noCorrente = noCorrente->esq;
+                }
+            } else if (chave > noCorrente->getChave()) {
+                if (noCorrente->dir == nullptr) {
+                    noCorrente->dir = new NoABB(chave, valor);
+                    inserido = true;
+                } else {
+                    noCorrente = noCorrente->dir;
+                }
+            }
+        }       
     }
     
     // retorna uma referência ao nó com a chave especificada
@@ -170,6 +208,25 @@ public:
                 p = p->esq;
             else
                 p = p->dir;
+        }
+        return nullptr;
+    }
+
+    NoABB<C, V>* buscarIterativo(C chave) {
+        queue<NoABB<C, V>*> queueNoABB;
+        queueNoABB.push(raiz);
+
+        while (!queueNoABB.empty()) {
+            if (queueNoABB.front()->getChave() == chave) {
+                return queueNoABB.front();
+            }
+            else {
+                if (queueNoABB.front()->esq != nullptr)
+                    queueNoABB.push(queueNoABB.front()->esq);
+                if (queueNoABB.front()->dir != nullptr)
+                    queueNoABB.push(queueNoABB.front()->dir);
+                queueNoABB.pop();
+            }
         }
         return nullptr;
     }
@@ -226,6 +283,10 @@ public:
         return alturaNo(raiz) - 1;
     }
 
+    int alturaAnsiosa() {
+        return h;
+    }
+
     void calcularProfundidades() {
         //exercicio 1.e
         //Acrescente um campo profundidade a estrutura ABB para armazenar a profundidade do nó. Escreva uma
@@ -239,6 +300,10 @@ public:
         //todos os caminhos que levam da raíz até um nó. Escreva um método ABB_ComprimentoInterno que retorne
         //o comprimento interno de uma árvore binária.
         return comprimentoInternoNo(raiz) - 1;
+    }
+
+    int comprimentoInternoAnsioso() {
+        return ci;
     }
 
 
