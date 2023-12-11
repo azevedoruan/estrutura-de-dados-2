@@ -152,6 +152,16 @@ private:
         return comprimentoInternoNo(no->esq) + comprimentoInternoNo(no->dir) + 1;
     }
     
+    void destruirNo(NoABB<C, V>* no) {
+        if (no == nullptr) {
+            return;
+        } else {
+            destruirNo(no->esq);
+            destruirNo(no->dir);
+            delete no;            
+        }
+    }
+
 public:
     ABB() {
         raiz = nullptr;
@@ -159,7 +169,9 @@ public:
         h = 0;
         ci = 0;
     }
-    ~ABB() = default;
+    ~ABB() {
+        destruirNo(raiz);
+    }
 
     // insere o par (chave, valor) na árvore
     void inserir(C chave, V valor) {
