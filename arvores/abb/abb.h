@@ -101,6 +101,15 @@ private:
         return no;
     }
 
+    NoABB<C, V>* buscarNoMenor(NoABB<C, V>* no) {
+        if (no == nullptr)
+            return nullptr;
+        if (no->esq == nullptr)
+            return no;
+        else
+            return buscarNoMenor(no->esq);
+    }
+
     void imprimirNo(NoABB<C, V> *no, int nivel, char lado) {
         int nivelAux = nivel;
         if (no == nullptr) {
@@ -318,7 +327,18 @@ public:
         return ci;
     }
 
+    void ordenar(int* v, int n) {
+        for (int i = 0; i < n; i++) {
+            inserir(v[i], 0);
+        }
 
+        NoABB<C, V>* aux = nullptr;
+        for (int i = 0; i < n; i++) {
+            aux = buscarNoMenor(raiz);
+            v[i] = aux->chave;
+            remover(aux->chave);
+        }
+    }
 };
 
 #endif
