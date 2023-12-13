@@ -35,13 +35,6 @@ public:
     // uma vez que os valores são possivelmente objetos grandes
     const tV& getValor() { return valor; }
 
-    bool ehVermelho() {
-        if (this == nullptr) {
-            return false;
-        }
-        return this->cor = Cor::VERMELHO;
-    }
-
 private:
 
     // O nó armazena a cor da aresta que incide sobre ele
@@ -108,18 +101,11 @@ class ARN {
         //retorna o endereço do nó com a chave antecessora da chave especificada
         NoARN<tC, tV>* antecessor(NoARN<tC, tV>* no);
 
-        bool ehVermelho() {
-            if (this == nullptr)
-        }
+        bool ehVermelho(NoARN<tC, tV>* no);
         
 private:
 
-    NoARN<tC, tV>*inserirNo(NoARN<tC, tV>* no, tC chave, tV valor) {
-        if (no == nullptr) {
-            return new NoARN(chave, valor);
-        }
-        if (chave < no->chave)
-    }
+    NoARN<tC, tV>*inserirNo(NoARN<tC, tV>* no, tC chave, tV valor);
 
     // armazena o endereço da raiz da árvore
     NoARN<tC, tV> *raiz;
